@@ -1,0 +1,108 @@
+#!/bin/sh
+
+
+ACTION=$1
+NAME_PATTERN=$2
+
+
+function help {
+  cat << EOM
+wlctl - a simple wrapper for connmanctl to enable/disable Wi-Fi,
+        and to connect to / disconnect from a Wi-Fi network
+
+Written by Giorgi Gzirishvili <drn+contact.tools.asteroidos.wlctl@disroot.org>
+This code is licensed under the MIT License.
+
+USAGE
+  wlctl ACTION [NAME_PATTERN]
+
+  Actions:
+    enable                      Enable Wi-Fi.
+    disable                     Disable Wi-Fi.
+    connect [NAME_PATTERN]      Connect to a Wi-Fi network. You can specify a
+                                unique name pattern in order to connect to a
+                                specific network available.
+    disconnect [NAME_PATTERN]   Disonnect from a Wi-Fi network. You can specify
+                                a unique name pattern in order to connect to a
+                                specific network available.
+    status                      Get connection and hardware status.
+    help                        Get this help.
+
+EOM
+}
+
+
+# === BEGIN Utils ===
+function blank_line {
+  echo ''
+}
+
+function scan_networks {
+  echo 'Scanning...'
+  connmanctl scan wifi >/dev/null
+  blank_line
+}
+
+function list_networks {
+  echo 'Available networks:'
+  connmanctl services
+  blank_line
+}
+
+function select_network {
+  if [ -z $NAME_PATTERN ]; then
+    echo -ne "Enter network name or regex pattern to match:\n> "
+    read NAME_PATTERN
+    blank_line
+  fi
+
+  SELECTED_NETWORK=$(connmanctl services | grep -i "$NAME_PATTERN" | \
+                     head -n 1 | grep -io 'wifi_[^ ]*')
+}
+# ==== END Utils ====
+
+
+function wifi_state {
+  connmanctl $1 wifi
+  blank_line
+}
+
+function network_action {
+  wifi_state enable 1>/dev/null 2>/dev/null
+  sleep 0.1
+  scan_networks
+  list_networks
+  select_network
+  connmanctl $1 $SELECTED_NETWORK
+  blank_line
+}
+
+function status {
+  echo 'Connection:'
+  connmanctl state
+  blank_line
+
+  WIFI_STATUS=$(connmanctl technologies | grep -A 6 'technology/wifi' | \
+                tail -n 4)
+
+  echo 'Wi-Fi:'
+  echo "$WIFI_STATUS"
+  blank_line
+
+  if [ -n "$(grep Powered <<< $WIFI_STATUS | grep True)" ]; then
+    scan_networks
+    list_networks
+  fi
+}
+
+case $ACTION in
+  enable) wifi_state enable ;;
+  disable) wifi_state disable ;;
+  connect) network_action connect ;;
+  disconnect) network_action disconnect ;;
+  status) status ;;
+  help) help ;;
+  '') echo "No action specified. Run \`wlctl help\` for usage information." ;;
+  *) echo "Invalid action: '$ACTION'. Run \`wlctl help\` for usage information." ;;
+esac
+
