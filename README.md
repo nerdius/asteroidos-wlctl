@@ -32,17 +32,17 @@ You can run `wlctl help` to get the usage information:
 USAGE
   wlctl ACTION [NAME_PATTERN]
 
-  Actions:
-    enable                      Enable Wi-Fi.
-    disable                     Disable Wi-Fi.
-    connect [NAME_PATTERN]      Connect to a Wi-Fi network. You can specify an
-                                unique name pattern in order to connect to a
-                                specific network available.
-    disconnect [NAME_PATTERN]   Disonnect from a Wi-Fi network. You can specify
-                                an unique name pattern in order to connect to a
-                                specific network available.
-    status                      Get connection and hardware status.
-    help                        Get this help.
+  Actions:
+    enable                      Enable Wi-Fi.
+    disable                     Disable Wi-Fi.
+    connect [NAME_PATTERN]      Connect to a Wi-Fi network. You can specify a
+                                unique name pattern in order to connect to a
+                                specific network.
+    disconnect [NAME_PATTERN]   Disonnect from a Wi-Fi network. You can specify
+                                a unique name pattern in order to disconnect
+                                from a specific network.
+    status                      Get connection and hardware status.
+    help                        Get this help.
 ```
 
 # Limitations
