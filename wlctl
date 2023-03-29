@@ -21,10 +21,10 @@ USAGE
     disable                     Disable Wi-Fi.
     connect [NAME_PATTERN]      Connect to a Wi-Fi network. You can specify a
                                 unique name pattern in order to connect to a
-                                specific network available.
+                                specific network.
     disconnect [NAME_PATTERN]   Disonnect from a Wi-Fi network. You can specify
-                                a unique name pattern in order to connect to a
-                                specific network available.
+                                a unique name pattern in order to disconnect
+                                from a specific network.
     status                      Get connection and hardware status.
     help                        Get this help.
 
