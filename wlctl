@@ -89,7 +89,7 @@ function status {
   echo "$WIFI_STATUS"
   blank_line
 
-  if [ -n "$(grep Powered <<< $WIFI_STATUS | grep True)" ]; then
+  if [ -n "$(echo -e "$WIFI_STATUS" | grep Powered | grep True)" ]; then
     scan_networks
     list_networks
   fi
