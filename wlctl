@@ -69,7 +69,7 @@ function wifi_state {
 
 function network_action {
   wifi_state enable 1>/dev/null 2>/dev/null
-  sleep 0.1
+  sleep 0.25
   scan_networks
   list_networks
   select_network
